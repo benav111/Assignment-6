@@ -4,8 +4,8 @@ public class runBJ
 {
 	public static void main(String[] args) 
 	{
-		cardDeck deck = new cardDeck();
-		deck.shuffleDeck();
-		deck.printDeck();
+		blackJackBetting bj = new blackJackBetting();
+		bj.shuffle();
+		bj.playBJ();
 	}
 }

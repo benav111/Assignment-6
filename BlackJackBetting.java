@@ -171,7 +171,7 @@ public class BlackJackBetting
 			return;
 	}
 	
-	public void dealerWins()
+	private void dealerWins()
 	{
 		//Checks if the dealer wins and if not return false.
 		
@@ -448,7 +448,7 @@ public class BlackJackBetting
 		}
 	}
 
-	public void initialOption()
+	private void initialOption()
 	{
 		//Allows the option to double down for the first two cards dealt
 		System.out.println("Please press H to Hit, S to stay, D to Double Down or Q to quit.");
@@ -503,7 +503,7 @@ public class BlackJackBetting
 		
 	}
 	
-	public void userOption()
+	private void userOption()
 	{
 		//Called after dealer has dealt cards and it is the player's turn. 
 		//Asks if the user wants to hit, stay, double down or quit.

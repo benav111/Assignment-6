@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class blackJackBetting
 {
@@ -19,7 +20,8 @@ public class blackJackBetting
 	private cardDeck myDeck;
 	private String[] dealerHand;
 	private String[] playerHand;
-	Scanner reader;
+	//Scanner reader;
+	requestAdapter adapter;
 
 	//--------------------------------------Constructor-------------------------------------
 	public blackJackBetting()
@@ -31,7 +33,8 @@ public class blackJackBetting
 		myDeck = new cardDeck();
 		dealerHand = new String[11];	//Initialized to 11 cards at max because that's 
 		playerHand = new String[11];	//the most cards possible for a player to get in any given hand
-		reader = new Scanner(System.in);
+		//reader = new Scanner(System.in);
+		adapter = new requestAdapter(System.in, System.out);
 		balance = 100;
 		wager = 0;
 	}
@@ -335,11 +338,12 @@ public class blackJackBetting
 					System.out.println("Would you like to buy insurance?");
 					System.out.println("This means you can take half your wager now regardless"
 										+"\nof if I have Blackjack under the hidden card.");
-					System.out.println("Type Y for Yes or N for No."
-										+ " If you type no, we will continue playing.");
+					//System.out.println("Type Y for Yes or N for No."
+					//					+ " If you type no, we will continue playing.");
 					try
 					{
-						char input = reader.next().trim().charAt(0);	
+						//char input = reader.next().trim().charAt(0);
+						char input = adapter.askChar("Type Y for Yes or N for No. If you type no, we will continue playing.");
 						if(input == 'Y' || input == 'y')			//Player wants insurance
 						{
 							//Add half of what they bet but typecast to an int so it's a whole amount
@@ -361,7 +365,7 @@ public class blackJackBetting
 					catch (InputMismatchException e) 
 					{
 						System.out.println("Invalid value!");
-						reader.next(); 					//Consumes the invalid token
+						//reader.next(); 					//Consumes the invalid token
 					}
 				}
 			
@@ -384,14 +388,14 @@ public class blackJackBetting
 	public void getBet()
 	{
 		//Gets bet from player in whole dollar amount
-		System.out.println("How much would you like to bet?"
-						+ " Please enter amount in whole dollars.");
+		//System.out.println("How much would you like to bet? Please enter amount in whole dollars.");
 		boolean goodInput = false;
 		while (!goodInput)	//Test to make sure they entered a valid amount
 		{
 			try
 			{
-				int i = reader.nextInt();
+				//int i = reader.nextInt();
+				int i = adapter.askNum("How much would you like to bet? Please enter amount in whole dollars.");
 				if(i <= balance && i > 0)
 				{
 					setWager(i);				
@@ -407,7 +411,7 @@ public class blackJackBetting
 			catch (InputMismatchException e) 
 			{
 				System.out.println("Invalid value!");
-				reader.next(); 	//Consumes the invalid token
+				//reader.next(); 	//Consumes the invalid token
 				getBet();		//Calls this function again if error occurs
 			}
 		}
@@ -420,11 +424,12 @@ public class blackJackBetting
 		System.out.println("\nYour total is " + playerTotal() + ".");
 		if(playerIndex == 2) 		//For first two cards only offer double down
 		{	
-			System.out.println("Please press H to Hit, S to stay, D to Double Down or Q to quit.");
+			//System.out.println("Please press H to Hit, S to stay, D to Double Down or Q to quit.");
 			char input;
 			try
 			{
-				input = reader.next().trim().charAt(0);	
+				//input = reader.next().trim().charAt(0);	
+				input = adapter.askChar("Please press H to Hit, S to stay, D to Double Down or Q to quit.");
 				switch (input) 
 				{
 					case 'H':		//Hit 
@@ -466,17 +471,18 @@ public class blackJackBetting
 			catch (InputMismatchException e) 
 			{
 				System.out.println("Invalid value!");
-				reader.next(); // this consumes the invalid token
+				//reader.next(); // this consumes the invalid token
 				userOption();
 			}	
 		}
 		else		//Player has more than 2 cards so double down not allowed
 		{
-			System.out.println("Please press H to Hit, S to stay, or Q to quit.");
+			//System.out.println("Please press H to Hit, S to stay, or Q to quit.");
 			char input;
 			try
 			{
-				input = reader.next().trim().charAt(0);	
+				//input = reader.next().trim().charAt(0);	
+				input = adapter.askChar("Please press H to Hit, S to stay or Q to quit.");
 				switch (input) 
 				{
 					case 'H':		//Hit 
@@ -504,7 +510,7 @@ public class blackJackBetting
 			catch (InputMismatchException e) 
 			{
 				System.out.println("Invalid value!");
-				reader.next(); // this consumes the invalid token
+				//reader.next(); // this consumes the invalid token
 				userOption();
 			}			
 		}
@@ -525,11 +531,12 @@ public class blackJackBetting
 		else						//Otherwise continue
 		{
 			System.out.println("Balance: $" + getBalance() + ".");
-			System.out.println("\nPress P to play a new hand or Q to quit.");
+			//System.out.println("\nPress P to play a new hand or Q to quit.");
 			char input;
 			try
 			{
-				input = reader.next().trim().charAt(0);	
+				//input = reader.next().trim().charAt(0);	
+				input = adapter.askChar("\nPress P to play a new hand or Q to quit.");
 				switch (input) 
 				{
 					case 'P':		//Play a new hand
@@ -553,7 +560,7 @@ public class blackJackBetting
 			catch (InputMismatchException e) 
 			{
 				System.out.println("Invalid value!");
-				reader.next(); 		 //Consumes the invalid token
+				//reader.next(); 		 //Consumes the invalid token
 				userLimitedOption(); //Restarts this function if this error is called
 			}
 		}
@@ -571,6 +578,17 @@ public class blackJackBetting
 	
 	//-------------------------------Testing Functions-------------------------------------
 	
+	public void botGame(ByteArrayInputStream botfeed, PrintStream botread)
+	{
+		//Game is player run by default. Changes setting to be bot-run
+		adapter.setIn(botfeed);
+		//adapter.setIn(System.in);
+		//adapter.setOut(botread);
+		adapter.setOut(System.out);
+	}
+	
+	
+	
 	public void testValueFunction()
 	{
 		//Used to test the getValue() function
@@ -584,4 +602,10 @@ public class blackJackBetting
 		}
 		System.out.println();
 	}
+	
+	public String drawCard()
+	{
+		return myDeck.getCard();
+	}
+	
 }

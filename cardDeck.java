@@ -10,7 +10,7 @@ public class cardDeck
 	//Each of the cards represented by their value followed by their suite
 	//So a 'QH' means Queen of Hearts
 	
-    private static String[ ] cards= {" ", 
+    private static String[ ] cards= { 
         "AS", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "TS", "JS", "QS", "KS",
         "AH", "2H", "3H","4H", "5H","6H", "7H", "8H", "9H", "TH", "JH", "QH", "KH",
         "AD", "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D", "TD", "JD", "QD", "KD",
@@ -19,12 +19,12 @@ public class cardDeck
    //--------------------------------------Instance Members-------------------------------
    
     private int nextCard;    //Next card to be dealt from the deck
-    private int[ ] deck = new int[DECKSIZE + 1];   //Deck of cards
+    private int[ ] deck = new int[DECKSIZE];   //Deck of cards
 
 	//--------------------------------------Constructor------------------------------------
     public cardDeck()
     {
-        nextCard = 1;		//Next card to be dealt is the first card in the deck
+        nextCard = 0;		//Next card to be dealt is the first card in the deck
     }
     
     //------------------------------Accessor and Mutator Methods----------------------------
@@ -63,33 +63,32 @@ public class cardDeck
    public void shuffleDeck()
     {
 		//Shuffles deck of cards
-        int index;
+        int index = 0;
         int val;
         Random rand = new Random( );
 
-        index = 1;
         for (int i = 0; i < deck.length; i++)
 		{
-			deck[i] = 0;  //Initialize array to 0's
+			deck[i] = -1;  //Initialize array of -1's
 		}
 
         while (index < deck.length)
         {   
-            val = rand.nextInt(DECKSIZE) + 1;   //Generates a value 1 thru 52
-            if (deck[val] == 0)
+            val = rand.nextInt(DECKSIZE);   //Generates a value 0 thru 51
+            if (deck[val] == -1)
             {          					 //If the card place referred to in the deck is 
                 deck[val] = index;   	 //unused/not intiated yet, then assign it a card
                 index++;            	 //Get next card
             }
         } 
-        nextCard = 1;           //Prepare to deal the first card
+        nextCard = 0;           //Prepare to deal the first card
     }
 	
     public String getCard ()
     {
 		//Returns the nextCard in the deck 
 		String card = "";
-        if (nextCard <= DECKSIZE)
+        if (nextCard < DECKSIZE)
         {
             card = cards[deck[nextCard]];
 			nextCard++;
@@ -103,11 +102,11 @@ public class cardDeck
 	
     public int getCardValue(String checkCard)
     {
-		//Returns the index of the card passed through for value calculation
-		for (int i = 1; i <= 52; i++)
+		//Returns the index+1 of the card passed through for value calculation
+		for (int i = 0; i < 52; i++)
 		{
 			if(cards[i].equals(checkCard))
-				return i;
+				return i+1;
 		}
 		return -1;
     }
@@ -121,7 +120,7 @@ public class cardDeck
     public String getCard(int index)
     {
 		//Gets a certain card based on given index
-        if (index > 0 && index <= DECKSIZE)
+        if (index >= 0 && index <= DECKSIZE)
             return cards[index];
         else
             return " ";    //Error

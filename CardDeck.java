@@ -125,4 +125,12 @@ public class CardDeck
         else
             return " ";    //Error
     }
+    
+    //Override
+	public String toString() 
+	{
+		//Overriding toString method
+		return "CardDeck [DECKSIZE=" + DECKSIZE + ", nextCard=" + nextCard + ", "
+				+ (deck != null ? "deck=" + Arrays.toString(deck) : "") + "]";
+	}
 }
